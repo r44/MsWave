@@ -16,9 +16,11 @@ class root:
         self.query = query
 
         T = query[0].shape[1]
-        
+
         #self.pivot = [T/4+T/8*i for i in range(20) if T/4+T/8*i <= T]
         self.pivot = [T/2+T/4*i for i in range(20) if T/2+T/4*i <= T]
+        self.pivot = [T*3/4+T/8*i for i in range(20) if T*3/4+T/8*i <= T]
+        self.pivot = [T*3/4+T/16*i for i in range(20) if T*3/4+T/16*i <= T]
         #self.pivot = [2**i for i in range(20) if 2**i <= T]
 
         self.pivot[-1] = T
@@ -38,7 +40,7 @@ class root:
         lev = self.level
         s = self.pivot[lev-1]
         e = self.pivot[lev]
-        
+
         return self.query[siteid][:,s:e], s, e
 
     def prp1(self, ub):
@@ -50,7 +52,7 @@ class root:
         else:
             th = sorted(self.ub)[-1]
         return th
-    
+
     def check1(self,siteid,rc):
         if rc == 0:
             del self.rs[siteid]
@@ -62,7 +64,7 @@ class root:
         self.rc = 0
         self.level += 1
         self.ub = []
-    
+
     def remainsite(self):
         return self.rs
 

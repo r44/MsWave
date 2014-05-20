@@ -5,7 +5,11 @@ from MsWave import MsWave
 from Site import Site
 from numpy import *
 
+import time as time
+import datetime as dtime
+
 #main
+
 k = 1
 lenSeg = 1000
 nSeg = 20
@@ -17,7 +21,10 @@ N = lenSeg*nSeg
 #data = (spio.loadmat('../LabelMe'))['data']
 data = (spio.loadmat('../ANNsift_base'))['data'].T
 
-LogFile = open('./Log','w+')
+t = time.time()
+dstr = dtime.datetime.fromtimestamp(t).strftime('%Y-%m-%d,%H:%M:%S')
+
+LogFile = open('./logs/Log_'+dstr,'w+')
 
 TimeLen = len(data[0])
 MatrixCost = TimeLen*(TimeLen-1)/2;
@@ -25,14 +32,14 @@ AccCost = nSeg * MatrixCost;
 AccNaiveCost = 0;
 
 
-QList = [x*10 for x in xrange(1,21)];
+QList = [x*10 for x in xrange(1,201)];
 for Q in QList:
     q = [randrange(N) for i in range(Q)]
 #q = [4,9,10,442,123]
 #q = [4]
     print '(#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d' % (nSeg,lenSeg,N,k,Q)
     print >> LogFile, '|Q|=' + str(Q)
-    print >> LogFile, '(#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d' % (nSeg,lenSeg,N,k,Q)
+    print >> LogFile, '(#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d' % (lenSeg,nSeg,N,k,Q)
 #print 'query id = ' + str(q)
     print >> LogFile, 'query id = ' + str(q)
     _query = matrix(data[q])
@@ -62,14 +69,16 @@ for Q in QList:
     print >> LogFile, level_rs
     print >> LogFile, 'ans = ' + str(ans)
     print >> LogFile, 'cost = '+str(cost)+'/'+str(naive)+'('+str(float(cost)/naive)+')'
+    print >> LogFile, 'qcost = '+str(qcost)+'/'+str(cost)+'('+str(float(qcost)/cost)+')'
     print >> LogFile, 'matrix+cost = '+str(cost+nSeg*MatrixCost)+'/'+str(naive)+'('+str(float(cost+nSeg*MatrixCost)/naive)+')'
     print >> LogFile, 'AccCost = '+str(AccCost)+'/'+str(AccNaiveCost)+'('+str(float(AccCost)/AccNaiveCost)+')'
     print level_rs
     print 'ans = ' + str(ans)
     print 'cost = '+str(cost)+'/'+str(naive)+'('+str(float(cost)/naive)+')'
+    print 'qcost = '+str(qcost)+'/'+str(cost)+'('+str(float(qcost)/cost)+')'
     print 'matrix+cost = '+str(cost+nSeg*MatrixCost)+'/'+str(naive)+'('+str(float(cost+nSeg*MatrixCost)/naive)+')'
     print 'AccCost = '+str(AccCost)+'/'+str(AccNaiveCost)+'('+str(float(AccCost)/AccNaiveCost)+')'
-    print >> LogFile, '#### End of (#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d ####' % (nSeg,lenSeg,N,k,Q)
+    print >> LogFile, '#### End of (#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d ####\n' % (nSeg,lenSeg,N,k,Q)
 #print >> 'cost = '+str(cost)+'/'+str(naive)+'('+str(float(cost)/naive)+')'
 #print 'qcost = '+str(qcost)
 
