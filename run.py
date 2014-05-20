@@ -8,12 +8,6 @@ from numpy import *
 import time as time
 import datetime as dtime
 
-#main
-
-k = 1
-lenSeg = 1000
-nSeg = 20
-
 lenSeg = 500
 nSeg = 200
 N = lenSeg*nSeg
@@ -31,14 +25,15 @@ MatrixCost = TimeLen*(TimeLen-1)/2;
 AccCost = nSeg * MatrixCost;
 AccNaiveCost = 0;
 
-
-QList = [x*10 for x in xrange(1,201)];
-for Q in QList:
+k = 1
+Q = 20;
+#QList = [x*10 for x in xrange(1,201)];
+KList = [1] + [x*10 for x in xrange(1,201)];
+for k in KList:
     q = [randrange(N) for i in range(Q)]
 #q = [4,9,10,442,123]
 #q = [4]
-    print '(#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d' % (nSeg,lenSeg,N,k,Q)
-    print >> LogFile, '|Q|=' + str(Q)
+    print '(#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d' % (lenSeg,nSeg,N,k,Q)
     print >> LogFile, '(#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d' % (lenSeg,nSeg,N,k,Q)
 #print 'query id = ' + str(q)
     print >> LogFile, 'query id = ' + str(q)
@@ -66,32 +61,22 @@ for Q in QList:
     naive = size(_query)*nSeg + nSeg*k + k
     AccCost += cost;
     AccNaiveCost += naive
-    print >> LogFile, level_rs
-    print >> LogFile, 'ans = ' + str(ans)
-    print >> LogFile, 'cost = '+str(cost)+'/'+str(naive)+'('+str(float(cost)/naive)+')'
-    print >> LogFile, 'qcost = '+str(qcost)+'/'+str(cost)+'('+str(float(qcost)/cost)+')'
-    print >> LogFile, 'matrix+cost = '+str(cost+nSeg*MatrixCost)+'/'+str(naive)+'('+str(float(cost+nSeg*MatrixCost)/naive)+')'
-    print >> LogFile, 'AccCost = '+str(AccCost)+'/'+str(AccNaiveCost)+'('+str(float(AccCost)/AccNaiveCost)+')'
     print level_rs
     print 'ans = ' + str(ans)
     print 'cost = '+str(cost)+'/'+str(naive)+'('+str(float(cost)/naive)+')'
     print 'qcost = '+str(qcost)+'/'+str(cost)+'('+str(float(qcost)/cost)+')'
     print 'matrix+cost = '+str(cost+nSeg*MatrixCost)+'/'+str(naive)+'('+str(float(cost+nSeg*MatrixCost)/naive)+')'
     print 'AccCost = '+str(AccCost)+'/'+str(AccNaiveCost)+'('+str(float(AccCost)/AccNaiveCost)+')'
+    print >> LogFile, level_rs
+    print >> LogFile, 'ans = ' + str(ans)
+    print >> LogFile, 'cost = '+str(cost)+'/'+str(naive)+'('+str(float(cost)/naive)+')'
+    print >> LogFile, 'qcost = '+str(qcost)+'/'+str(cost)+'('+str(float(qcost)/cost)+')'
+    print >> LogFile, 'matrix+cost = '+str(cost+nSeg*MatrixCost)+'/'+str(naive)+'('+str(float(cost+nSeg*MatrixCost)/naive)+')'
+    print >> LogFile, 'AccCost = '+str(AccCost)+'/'+str(AccNaiveCost)+'('+str(float(AccCost)/AccNaiveCost)+')'
+    t = time.time()
+    dstr = dtime.datetime.fromtimestamp(t).strftime('%Y-%m-%d,%H:%M:%S')
+    print >> LogFile, dstr
     print >> LogFile, '#### End of (#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d ####\n' % (nSeg,lenSeg,N,k,Q)
 #print >> 'cost = '+str(cost)+'/'+str(naive)+'('+str(float(cost)/naive)+')'
 #print 'qcost = '+str(qcost)
-
-    '''
-    d = []
-    for i in xrange(N):
-        tmp = 0;
-        for l in xrange(Q):
-            tmp += sum( (k-j)**2 for (k,j) in zip(_query[l,:].tolist()[0], data[i]) )**0.5
-        d.append(tmp)
-
-    a = sorted( xrange(N), key=lambda k: d[k] )
-    sys.stderr.write('\n')
-    a = [i for i in a if i not in q]
-    print a[:k]
-    '''
+LogFile.close()
