@@ -9,7 +9,7 @@ import time as time
 import datetime as dtime
 
 lenSeg = 500
-nSeg = 200
+nSeg = 800
 N = lenSeg*nSeg
 
 #data = (spio.loadmat('../LabelMe'))['data']
