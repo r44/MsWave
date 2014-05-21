@@ -16,9 +16,10 @@ N = lenSeg*nSeg
 data = (spio.loadmat('../ANNsift_base'))['data'].T
 
 t = time.time()
-dstr = dtime.datetime.fromtimestamp(t).strftime('%Y-%m-%d,%H:%M:%S')
+dstr = dtime.datetime.fromtimestamp(t).strftime('%Y-%m-%d,%H:%M')
 
-LogFile = open('./mlogs/Log_'+dstr,'w+')
+WeightName = 'origin';
+LogFile = open('./mlogs/Weights/' + str(lenSeg) + '_' + str(nSeg) + '/' + WeightName + '/' + dstr,'w+');
 
 TimeLen = len(data[0])
 MatrixCost = TimeLen*(TimeLen-1)/2;
@@ -26,26 +27,27 @@ AccCost = nSeg * MatrixCost;
 AccNaiveCost = 0;
 
 Q = 100;
-k = 100;
-mtimes = 100;
+k = 1;
+mtimes = 10;
+WPath = '../trans_ANN/Weights/' + str(lenSeg) + '_' + str(nSeg) + '/' + WeightName + '/';
+WList = dict()
+for i in range(nSeg):
+    WList[i] = matrix( (spio.loadmat(WPath + 'X_'+str(lenSeg)+'_'+str(i+1)))['X'] ).T
+
 for t in range(mtimes):
     print t
     print >>LogFile, 't=' + str(t)
 
     q = [randrange(N) for i in range(Q)]
-#q = [4,9,10,442,123]
-#q = [4]
     print '(#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d' % (lenSeg,nSeg,N,k,Q)
     print >> LogFile, '(#instance, #machine, #total)=(%d, %d, %d), k=%d, #Q = %d' % (lenSeg,nSeg,N,k,Q)
-#print 'query id = ' + str(q)
     print >> LogFile, 'query id = ' + str(q)
     _query = matrix(data[q])
 
     sites = dict()
     query = dict()
     for i in range(nSeg):
-        #W = matrix( (spio.loadmat('../trans/X_'+str(lenSeg)+'_'+str(i+1)))['X'] ).T
-        W = matrix( (spio.loadmat('../trans_ANN/X_'+str(lenSeg)+'_'+str(i+1)))['X'] ).T
+        W = WList[i];
         query[i] = _query*W
 
         s = i*lenSeg;
