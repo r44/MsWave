@@ -9,7 +9,7 @@ import time as time
 import datetime as dtime
 
 lenSeg = 500
-nSeg = 800
+nSeg = 1000
 N = lenSeg*nSeg
 
 #data = (spio.loadmat('../LabelMe'))['data']
@@ -26,9 +26,9 @@ MatrixCost = TimeLen*(TimeLen-1)/2;
 AccCost = nSeg * MatrixCost;
 AccNaiveCost = 0;
 
-Q = 100;
+Q = 200;
 k = 1;
-mtimes = 10;
+mtimes = 30;
 WPath = '../trans_ANN/Weights/' + str(lenSeg) + '_' + str(nSeg) + '/' + WeightName + '/';
 WList = dict()
 for i in range(nSeg):
